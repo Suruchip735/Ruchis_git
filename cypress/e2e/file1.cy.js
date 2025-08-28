@@ -54,7 +54,16 @@ describe('template spec', () => {
   it.only('Web tables -1',() => {
     cy.visit('/')
     cy.contains('Tables & Data').click()
-    cy.contains('Smart Table').click() 
+    cy.contains('Smart Table').click()  
+
+      //1. How to find by text
+    cy.get('tbody').contains('tr', 'Larry').then( tableRow => {
+        cy.wrap(tableRow).find('.nb-edit').click()
+        cy.wrap(tableRow).find('[placeholder="Age"]').clear().type('35')
+        cy.wrap(tableRow).find('.nb-checkmark').click()
+        cy.wrap(tableRow).find('td').last().should('have.text', '35')
+    })
+
   })
 })
 

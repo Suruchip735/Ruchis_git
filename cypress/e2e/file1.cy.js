@@ -51,19 +51,89 @@ describe('template spec', () => {
 
   })
 
-  it.only('Web tables -1',() => {
+  it('Web tables -1',() => {
     cy.visit('/')
     cy.contains('Tables & Data').click()
     cy.contains('Smart Table').click()  
-
-      //1. How to find by text
+    /*
+      //1. How to find by text 
     cy.get('tbody').contains('tr', 'Larry').then( tableRow => {
         cy.wrap(tableRow).find('.nb-edit').click()
         cy.wrap(tableRow).find('[placeholder="Age"]').clear().type('35')
-        cy.wrap(tableRow).find('.nb-checkmark').click()
+        cy.wrap(tableRow).find('.nb-checkmark').click() 
         cy.wrap(tableRow).find('td').last().should('have.text', '35')
-    })
+        
+        //Find by index 
+        cy.get('.nb-plus').click()
 
-  })
-})
+        cy.get('thead tr').eq(2).then(tableRow => {
+          cy.wrap(tableRow).find('[placeholder="ID"]').type('510')
+          cy.wrap(tableRow).find('[placeholder="First Name"]').type('Sophie')
+          cy.wrap(tableRow).find('[placeholder="Last Name"]').type('James')
+          cy.get('.nb-checkmark').click()
+
+          //Validate entered data 
+
+          cy.get('tbody tr').first().find('td').then( tableColumns => {
+            cy.wrap(tableColumns).eq(1).should('have.text','510')
+            cy.wrap(tableColumns).eq(2).should('have.text','Sophie')
+            cy.wrap(tableColumns).eq(3).should('have.text','James')  
+          
+          }) */  
+
+          // Looping through the row 
+        const  ages = [45,20,30,21,43]
+        
+        cy.wrap(ages).each(age => {
+          cy.get('[placeholder="Age"]').clear()
+              cy.get('[placeholder="Age"]').type(age)
+        cy.wait(500)
+        cy.get('tbody tr').each( tableRows => {
+          cy.wrap(tableRows).find('td').last().should('have.text',age)
+        })
+        })
+    
+        })
+
+        it('Sliders',() => {
+          cy.visit('/')
+          cy.get('[tabtitle="Temperature"] circle')
+            .invoke('attr','cx','269.387')
+            .invoke('attr','cy','119.50')
+            .click()
+
+        cy.get('[class="value temperature h1"]').should('contain.text','26')
+
+        })
+
+        it('Drag and Drop',() => {
+          cy.visit('/')
+          cy.contains('Extra Components').click()
+          cy.contains('Drag & Drop').click()
+
+          cy.get('#todo-list div').eq(2).trigger('dragstart') 
+
+          cy.get('#drop-list').trigger('drop')
+        })
+
+        it.only('Cypress - iFrames',() => {
+          cy.visit('/')
+          cy.contains('Modal & Overlays').click()
+          cy.contains('Dialog').click() 
+          cy.frameLoaded('[data-cy="esc-close-iframe"]')
+          
+
+          cy.iframe().contains('Open Dialog with esc close').click()
+
+          cy.contains('Dismiss Dialog').click()
+
+          cy.enter('[data-cy="esc-close-iframe"]').then( getBody => {
+            getBody().contains('Open Dialog with esc close').click()
+            cy.contains('Dismiss Dialog').click()
+            getBody().contains('Open Dialog without esc close').click()
+            cy.contains('OK').click()
+          })
+         
+        })
+    })
 

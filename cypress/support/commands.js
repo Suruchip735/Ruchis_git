@@ -23,3 +23,10 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+import 'cypress-iframe';
+Cypress.Commands.add('openHome',() => {
+    cy.visit('/')
+})
+ Cypress.Commands.add('openHomePage',() => {
+    cy.visit('/')
+ })

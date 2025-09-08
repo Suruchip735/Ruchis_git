@@ -9,13 +9,13 @@ describe('template spec', () => {
     .press(Cypress.Keyboard.Keys.TAB) // same as pressing tab key 
   }),
 
-  it('Checkboxes',() => {
+  it.only('Checkboxes',() => {
     cy.visit('/')
     cy.contains('Modal & Overlays').click()
     cy.contains('Toastr').click()
     // --Case 1: Check all checkboxes isible 
     cy.get('[type="checkbox"]').check({force:true})
-
+    
     // ---Case 2: Uncheck all checkboxes visible 
         cy.get('[type="checkbox"]').uncheck({force:true})
   }),
@@ -110,7 +110,7 @@ describe('template spec', () => {
           cy.visit('/')
           cy.contains('Extra Components').click()
           cy.contains('Drag & Drop').click()
-
+ 
           cy.get('#todo-list div').eq(2).trigger('dragstart') 
 
           cy.get('#drop-list').trigger('drop')
@@ -131,7 +131,10 @@ describe('template spec', () => {
             getBody().contains('Open Dialog with esc close').click()
             cy.contains('Dismiss Dialog').click()
             getBody().contains('Open Dialog without esc close').click()
-            cy.contains('OK').click()
+            cy.contains('OK').click()  
+
+          
+            
           })
          
         })
